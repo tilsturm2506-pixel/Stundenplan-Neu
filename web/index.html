@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141417" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Stundenplan">
+<link rel="icon" type="image/svg+xml" href="icon.svg?v=5">
+<link rel="icon" href="favicon.ico?v=5" sizes="32x32">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=5">
+<link rel="apple-touch-icon" href="icon.png?v=5">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Stundenplan BWI1</title>
+<script src="theme.js"></script>
+<link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+<header class="topbar" id="bar"><div class="in row">
+  <div class="mini" id="mini" aria-hidden="true"></div>
+  <div class="tools">
+    <button class="ib" id="refreshBtn" aria-label="Aktualisieren" title="Aktualisieren"></button>
+    <button class="ib" id="addBtn" aria-label="Eigenen Termin hinzufügen" title="Eigener Termin"></button>
+    <button class="ib" id="themeBtn" aria-label="Hell/Dunkel wechseln" title="Hell/Dunkel"></button>
+  </div>
+</div></header>
+
+<div class="bigw"><div class="in big"><div class="eye" id="eye">&nbsp;</div><h1 id="ttl">Stundenplan</h1></div></div>
+
+<div class="ctlw" id="plantools"><div class="in">
+  <div class="ctl">
+    <div class="seg" id="seg"><i id="segThumb"></i><button data-v="day" title="Tag (1)">Tag</button><button data-v="week" title="Woche (2)">Woche</button><button data-v="grid" title="Raster (3)">Raster</button></div>
+    <div class="nav">
+      <button id="prevW" aria-label="Vorherige Woche" title="Vorherige Woche (⇧←)"></button>
+      <button class="td" id="todayBtn" title="Heute (T)">Heute</button>
+      <button id="nextW" aria-label="Nächste Woche" title="Nächste Woche (⇧→)"></button>
+    </div>
+  </div>
+  <div class="strip" id="strip"></div>
+</div></div>
+
+<main>
+  <div id="banner"></div>
+  <div id="hero"></div>
+  <div id="content"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  <footer id="stand"></footer>
+</main>
+
+<nav class="tabs" aria-label="Bereiche">
+  <button data-t="plan" class="on" id="tPlan"></button><button data-t="notes" id="tNotes"></button><button data-t="mods" id="tMods"></button>
+</nav>
+
+<dialog id="modDlg" aria-labelledby="mTitle">
+  <div class="pv tint" id="mPrev"><span class="sym" id="mPrevSym"></span><div><h2 id="mTitle" class="ti"></h2><div class="mt soft" id="mHint"></div></div></div>
+  <label>Farbe</label><div class="sws" id="mSw"></div>
+  <label>Symbol</label><div class="syms" id="mSym"></div>
+  <div class="own"><input type="text" id="mOwn" maxlength="8" autocomplete="off" placeholder="Eigenes Symbol, z. B. 🧮 oder DM" aria-label="Eigenes Symbol"></div>
+  <label for="mNote">Notiz</label><textarea id="mNote" maxlength="4000" placeholder="Gedanken, Aufgaben, Klausurtermin …"></textarea>
+  <div class="btns"><button class="btn d" id="mDel">Löschen</button><button class="btn" id="mCancel">Abbrechen</button><button class="btn p" id="mSave">Sichern</button></div>
+</dialog>
+
+<dialog id="addDlg" aria-labelledby="aTitle">
+  <h2 id="aTitle">Eigener Termin</h2><p class="hint">Erscheint nur auf diesem Gerät.</p>
+  <label for="fName">Name</label><input type="text" id="fName" maxlength="80" autocomplete="off" placeholder="z. B. Lerngruppe">
+  <label for="fDate">Datum</label><input type="date" id="fDate">
+  <div class="two"><div><label for="fStart">Von</label><input type="time" id="fStart"></div><div><label for="fEnd">Bis</label><input type="time" id="fEnd"></div></div>
+  <label for="fRoom">Raum <span class="opt">(optional)</span></label><input type="text" id="fRoom" maxlength="40" autocomplete="off">
+  <div class="chk"><span>Wöchentlich wiederholen</span><input type="checkbox" class="tg" id="fRepeat"></div>
+  <div id="untilWrap" hidden><label for="fUntil">Wiederholen bis</label><input type="date" id="fUntil"></div>
+  <label>Farbe</label><div class="sws" id="sws"></div>
+  <div class="err" id="addErr" role="alert"></div>
+  <div class="btns"><button class="btn" id="addCancel">Abbrechen</button><button class="btn p" id="addSave">Hinzufügen</button></div>
+</dialog>
+
+<script src="app.js?v=5"></script>
+</body>
+</html>

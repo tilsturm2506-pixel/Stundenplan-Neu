@@ -1,0 +1,69 @@
+name: Stundenplan aktualisieren
+
+on:
+  schedule:
+    - cron: '4,19,34,49 * * * *'
+    - cron: '30 4,5 * * *'   # Morgen-Nachricht; muss zu Notifier.MORNING_CRON passen
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+# Standard: keine Rechte. Jeder Job bekommt nur, was er braucht.
+permissions: {}
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      # Actions sind auf Commit-Hashes festgelegt (Schutz gegen nachträglich veränderte Tags)
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4.9.1
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: Dateien erzeugen
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          LIVE_URL: ${{ vars.LIVE_URL }}
+        run: |
+          for i in 1 2 3; do
+            if mvn -q -B compile org.codehaus.mojo:exec-maven-plugin:3.5.0:java -Dexec.mainClass=Main; then
+              break
+            fi
+            if [ "$i" -eq 3 ]; then exit 1; fi
+            echo "Versuch $i fehlgeschlagen, neuer Versuch in 20 Sekunden"
+            sleep 20
+          done
+          mkdir public
+          cp web/* public/
+          mv stundenplan.ics stundenplan.json public/
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

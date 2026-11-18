@@ -1,0 +1,15 @@
+{
+  "name": "Stundenplan BWI1",
+  "short_name": "Stundenplan",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f4f0",
+  "theme_color": "#f6f4f0",
+  "lang": "de",
+  "icons": [
+    {"src": "icon.svg", "type": "image/svg+xml", "sizes": "any"},
+    {"src": "icon-192.png", "type": "image/png", "sizes": "192x192"},
+    {"src": "icon.png", "type": "image/png", "sizes": "512x512", "purpose": "any maskable"}
+  ]
+}

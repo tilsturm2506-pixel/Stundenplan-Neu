@@ -1,0 +1,9 @@
+# Meldet automatisch Updates für jsoup und die GitHub Actions (inkl. Sicherheitslücken)
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }
